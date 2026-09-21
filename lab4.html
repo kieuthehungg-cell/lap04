@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buổi 4 - Bài 1: Icon SVG</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 24px;
+        background: #fafafa;
+      }
+      h1 {
+        margin-bottom: 32px;
+      }
+      .icon-row {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+      .icon-wrapper {
+        width: 150px;
+      }
+      .icon-wrapper p {
+        margin-top: 8px;
+        color: #555;
+      }
+      /* ===== Icon 1: Mặt cười ===== */
+      .face {
+        fill: #f1c40f;
+        stroke: #333;
+        stroke-width: 2;
+        transition: fill 0.3s;
+      }
+      .eye {
+        fill: #333;
+      }
+      .mouth {
+        fill: none;
+        stroke: #333;
+        stroke-width: 3;
+      }
+      .icon-wrapper:hover .face {
+        fill: #ffeaa7;
+      }
+      /* ===== Icon 2: Ngôi sao (dùng polygon) ===== */
+      .star {
+        fill: #f39c12;
+        transition:
+          fill 0.3s,
+          transform 0.3s;
+        transform-origin: center;
+      }
+      .icon-wrapper:hover .star {
+        fill: #e67e22;
+        transform: scale(1.1);
+      }
+      /* ===== Icon 3: Trái tim (dùng path) ===== */
+      .heart {
+        fill: #e74c3c;
+        transition: fill 0.3s;
+      }
+      .icon-wrapper:hover .heart {
+        fill: #c0392b;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Bộ Icon SVG — Rê chuột để xem hiệu ứng</h1>
+    <div class="icon-row">
+      <!-- Icon 1: Mặt cười -->
+      <div class="icon-wrapper">
+        <svg viewBox="0 0 100 100" width="120" height="120">
+          <circle class="face" cx="50" cy="50" r="40" />
+          <circle class="eye" cx="35" cy="40" r="5" />
+          <circle class="eye" cx="65" cy="40" r="5" />
+          <path class="mouth" d="M 30 60 Q 50 80 70 60" />
+        </svg>
+        <p>Mặt cười (circle + path)</p>
+      </div>
+      <!-- Icon 2: Ngôi sao -->
+      <div class="icon-wrapper">
+        <svg viewBox="0 0 100 100" width="120" height="120">
+          <polygon
+            class="star"
+            points="50,5 61,38 96,38 68,59 79,92 50,72 21,92 32,59 4,38 39,38"
+          />
+        </svg>
+        <p>Ngôi sao (polygon)</p>
+      </div>
+      <!-- Icon 3: Trái tim -->
+      <div class="icon-wrapper">
+        <svg viewBox="0 0 100 100" width="120" height="120">
+          <path
+            class="heart"
+            d="M50 88
+C20 65 5 45 5 28
+C5 12 18 2 32 2
+C42 2 48 8 50 14
+
+C52 8 58 2 68 2
+C82 2 95 12 95 28
+C95 45 80 65 50 88 Z"
+          />
+        </svg>
+        <p>Trái tim (path cong)</p>
+      </div>
+    </div>
+  </body>
+</html>
+
+Bài 2.
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buổi 4 - Bài 2: Biểu đồ doanh thu (Canvas)</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 24px;
+        background: #fafafa;
+      }
+      canvas {
+        border: 1px solid #ccc;
+        background: #fff;
+        border-radius: 6px;
+      }
+      .chu-thich {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin-top: 12px;
+        font-size: 14px;
+      }
+      .cham {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+        margin-right: 6px;
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Doanh thu 6 tháng gần nhất (triệu đồng)</h1>
+    <canvas id="chart" width="500" height="320"></canvas>
+
+    <div class="chu-thich">
+      <span
+        ><span class="cham" style="background: #2ecc71"></span>Đạt chỉ tiêu
+        (&ge; 50tr)</span
+      >
+      <span
+        ><span class="cham" style="background: #3498db"></span>Chưa đạt (&lt;
+        50tr)</span
+      >
+    </div>
+    <script>
+      const canvas = document.getElementById("chart");
+      const ctx = canvas.getContext("2d");
+      const data = [
+        { label: "T3", value: 32 },
+        { label: "T4", value: 45 },
+        { label: "T5", value: 38 },
+        { label: "T6", value: 60 },
+        { label: "T7", value: 55 },
+        { label: "T8", value: 48 },
+      ];
+      const barWidth = 55;
+      const gap = 20;
+      const baseY = 260; // vị trí trục hoành (đáy biểu đồ)
+      const scale = 3; // hệ số phóng đại giá trị cho dễ nhìn
+      // ----- Vẽ tiêu đề ngay trên canvas -----
+      ctx.font = "bold 16px Arial";
+      ctx.fillStyle = "#2c3e50";
+      ctx.fillText("Biểu đồ doanh thu theo tháng", 20, 25);
+      // ----- Vẽ trục hoành -----
+      ctx.strokeStyle = "#333";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+
+      ctx.moveTo(30, baseY);
+      ctx.lineTo(470, baseY);
+      ctx.stroke();
+      // ----- Vẽ từng cột dữ liệu -----
+      data.forEach((item, index) => {
+        const x = 40 + index * (barWidth + gap);
+        const barHeight = item.value * scale;
+        // Tô màu cột theo điều kiện: đạt chỉ tiêu (>=50) màu xanh lá,
+        // chưa đạt (<50) màu xanh dương
+        ctx.fillStyle = item.value >= 50 ? "#2ecc71" : "#3498db";
+        ctx.fillRect(x, baseY - barHeight, barWidth, barHeight);
+        // Nhãn tháng dưới trục hoành
+        ctx.fillStyle = "#333";
+        ctx.font = "13px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(item.label, x + barWidth / 2, baseY + 20);
+        // Giá trị trên đầu mỗi cột
+        ctx.fillText(
+          item.value + "tr",
+          x + barWidth / 2,
+          baseY - barHeight - 8,
+        );
+      });
+      ctx.textAlign = "left";
+    </script>
+  </body>
+</html>
